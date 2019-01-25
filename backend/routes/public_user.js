@@ -39,11 +39,26 @@ public_user.get('/:user_id', (req, res) => {
         })
 })
 
+// ✅ GET /user/:user_id/posts
+public_user.get('/:user_id/posts', (req, res) => {
+    const {user_id} = req.params;
+
+    userService.readPost(user_id)
+        .then(data => {
+            const {id, author, title, body} = data;
+            res.json({id, author, title, body});
+        })
+        .catch(err => {
+            res.status(404)
+            res.json(err.toString());
+        })
+})
+
 
 // ✅ GET /user/:user_id/posts/:post_id
 public_user.get('/:user_id/posts/:post_id', (req, res) => {
+    const {user_id, post_id} = req.params;
 
-    
     userService.read(user_id)
         .then(data => {
             const {id, username, email} = data;
