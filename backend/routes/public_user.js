@@ -26,17 +26,33 @@ public_user.post('/', (req, res) => {
 
 // ✅ GET /user/:user_id
 public_user.get('/:user_id', (req, res) => {
-    res.json({});
+    const {user_id} = req.params;
+
+    userService.read(user_id)
+        .then(data => {
+            const {id, username, email} = data;
+            res.json({id, username, email});
+        })
+        .catch(err => {
+            res.status(404)
+            res.json(err.toString());
+        })
 })
 
-// ✅ GET /user/
-public_user.get('/', (req, res) => {
-    res.json({});
-})
 
 // ✅ GET /user/:user_id/posts/:post_id
 public_user.get('/:user_id/posts/:post_id', (req, res) => {
-    res.json({});
+
+    
+    userService.read(user_id)
+        .then(data => {
+            const {id, username, email} = data;
+            res.json({id, username, email});
+        })
+        .catch(err => {
+            res.status(404)
+            res.json(err.toString());
+        })
 })
 
 // ✅ GET /user/:user_id/comments
