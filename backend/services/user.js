@@ -2,27 +2,51 @@ const {db} = require('./db')
 const userService = {};
 
 userService.create = (username, email, password) => {
-    const command = 'INSERT INTO users (username, email, password) VALUES (${username}, ${email}, ${password});';
+    const sql = `
+    INSERT INTO users (username, email, password) 
+    VALUES ($[username], $[email], $[password]);
+    `;
     
-    return db.none(command, {username, email, password});
-    // .none is for no return of records
+    return db.none(sql, { username, email, password });
 };
 
-userService.read = (id) => {
-    return db.one('SELECT * FROM users WHERE id=${id}', {id}) 
-    // PG promise, sql injections: one way to hack the system,
-    // SQL query, .one returns promises, returns data as an object because we're accessing only one because id is unique... sending just one
-    // return database.any(`SELECT * FROM users WHERE id=${id}`) //SQL query, .any returns promises, returns data as an array of objects because any is any number of data, give me any number of rows
+userService.read = (user_id) => {
+    const sql = `
+    SELECT * FROM users WHERE id=$[user_id];
+    `;
+
+    return db.one(sql, { user_id }); 
+    
 };
 
-userService.update = (id, name, email) => {
-    const command = 'UPDATE users SET name=${name}, email=${email} WHERE id=${id}';
-    return db.none(command, {id, name, email})
+userService.readPost = (user_id, post_id) => {
+    if(post_id){
+        return db.any('SELECT * FROM posts WHERE author=${user_id} AND id=${post_id}', { user_id, post_id }) 
+    } 
+    
+    return db.any('SELECT * FROM posts WHERE author=${user_id}', { user_id }) 
+    
 };
 
-userService.delete = (id) => {
-    const command = 'DELETE FROM pets WHERE owner=${id}; DELETE FROM users WHERE id=${id}';
-    return db.none(command, {id})
+userService.readComment = (user_id, comment_id) => {
+    if(comment_id){
+        return db.any('SELECT * FROM comment WHERE author=${user_id} AND id=${comment_id}', { user_id, comment_id }) 
+    }
+
+    return db.any('SELECT * FROM comment WHERE author=${user_id}', { user_id }) 
+
+};
+
+userService.update = (user_id, username, email, password) => {
+    const sql = 'UPDATE users SET username=${username}, email=${email}, password=${password} WHERE id=${user_id}';
+
+    return db.none(sql, { user_id, username, email, password })
+};
+
+userService.delete = (user_id) => {
+    const sql = 'DELETE FROM users WHERE id=${user_id}';
+    
+    return db.none(sql, { user_id })
 };
 
 module.exports = userService;
