@@ -6,47 +6,45 @@ const userService = require('../services/user');
 
 // ✅ POST /user
 userRoutes.post('/', (req, res) => {
-    const {username, email, password} = req.body;
+    const { username, email, password } = req.body;
 
     userService.create(username, email, password)
         .then(() => {
-            res.json({success: 'Created User!'});
+            res.json({success: `Created ${username}!`});
         })
         .catch(err => {
-            res.status(404)
-            res.json(err.toString());
+            console.log('Error', err.toString());
+            res.status(404).json({error: `Unable to create user! Try again!`});
         })
-})
+});
 
 // ✅ GET /user/:user_id
 userRoutes.get('/:user_id', (req, res) => {
-    const {user_id} = req.params;
+    const { user_id } = req.params;
 
     userService.read(user_id)
         .then(data => {
-            const {id, username, email} = data;
-            res.json({id, username, email});
+            res.json({ data });
         })
         .catch(err => {
-            res.status(404)
-            res.json(err.toString());
+            console.log('Error', err.toString());
+            res.status(404).json({error: `Unable to find user! Try again!`});
         })
-})
+});
 
 // ✅ GET /user/:user_id/posts
 userRoutes.get('/:user_id/posts', (req, res) => {
-    const {user_id} = req.params;
+    const { user_id } = req.params;
 
     userService.readPost(user_id)
         .then(data => {
             res.json({data});
         })
         .catch(err => {
-            res.status(404)
-            res.json(err.toString());
+            console.log('Error', err.toString());
+            res.status(404).json({error: `Unable to find post! Try again!`});
         })
-})
-
+});
 
 // ✅ GET /user/:user_id/posts/:post_id
 userRoutes.get('/:user_id/posts/:post_id', (req, res) => {
@@ -57,10 +55,10 @@ userRoutes.get('/:user_id/posts/:post_id', (req, res) => {
             res.json({data});
         })
         .catch(err => {
-            res.status(404)
-            res.json(err.toString());
+            console.log('Error', err.toString());
+            res.status(404).json({error: `Unable to find post! Try again!`});
         })
-})
+});
 
 // ✅ GET /user/:user_id/comments
 userRoutes.get('/:user_id/comments', (req, res) => {
@@ -74,7 +72,7 @@ userRoutes.get('/:user_id/comments', (req, res) => {
             res.status(404)
             res.json(err.toString());
         })
-})
+});
 
 // ✅ GET /user/:user_id/comments/:comment_id
 userRoutes.get('/:user_id/comments/:comment_id', (req, res) => {
@@ -88,7 +86,7 @@ userRoutes.get('/:user_id/comments/:comment_id', (req, res) => {
             res.status(404)
             res.json(err.toString());
         })
-})
+});
 
 // ✅ POST /user/login
 userRoutes.post('/login', (req, res) => {
@@ -120,9 +118,7 @@ userRoutes.post('/login', (req, res) => {
     //     .catch(err => {
     //         res.status(400).json({ error: err.toString() })
     //     })
-})
-
-
+});
 
 //PRIVATE USER ROUTES
 // ❌ PUT /user/:user_id
@@ -158,9 +154,9 @@ module.exports = userRoutes;
 
 
 // IDEAS:
-userRoutes.put(checkToken, '/user', (req, res) => {
+// userRoutes.put(checkToken, '/user', (req, res) => {
 
-});
+// });
 
 // a auth token is best to passed by header 
 const isLoggedIn = (req, res, next) => {
