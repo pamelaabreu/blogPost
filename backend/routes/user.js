@@ -124,14 +124,15 @@ userRoutes.post('/login', (req, res) => {
 // ❌ PUT /user/:user_id
 userRoutes.put('/:user_id', (req, res) => {
     const { user_id }  = req.params;
-    const { name, email } = req.body;
+    const { username, email, password } = req.body;
 
-    userService.update(id, name, email)
+    userService.update(user_id, username, email, password)
     .then(() => {
-        res.json({success:'lol u did it!'})
+        res.json({success: `Updated ${username} with ID:${user_id}!`});
     })
     .catch(err => {
-        // res.json('Error', err.toString());
+        console.log('Error', err.toString());
+        res.status(404).json({error: `Unable to update ${username}! Try again!`});
     })
 
 
@@ -139,15 +140,16 @@ userRoutes.put('/:user_id', (req, res) => {
 
 // ❌ DEL /user/:user_id
 userRoutes.delete('/:user_id', (req, res) => {
-    const {id} = req.params;
+    const {user_id} = req.params;
 
-    userService.delete(id)
-        .then(() => {
-            res.json({success: 'Deleted User', name, email});
-        })
-        .catch(err => {
-            res.json(err.toString());
-        })
+    userService.delete(user_id)
+    .then(() => {
+        res.json({success: `Deleted user with ID:${user_id}!`});
+    })
+    .catch(err => {
+        console.log('Error', err.toString());
+        res.status(404).json({error: `Unable to delete user with ID:${user_id}! Try again!`});
+    })
 })
 
 module.exports = userRoutes;
