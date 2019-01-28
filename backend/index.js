@@ -6,7 +6,7 @@ const app = express();
 const port = 3000;
 
 // const { checkToken } = require('./middleware');
-// const userRoutes = require('./routes/user');
+const userRoutes = require('./routes/user');
 
 // MIDDLEWARE
 app.use(bodyParser.urlencoded({extended: false}));
@@ -17,7 +17,7 @@ app.get('/ping', (req, res) => {
     res.json({'pong':true})
 })
 
-// app.use('/user', userRoutes);
+app.use('/user', userRoutes);
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
 
