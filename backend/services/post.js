@@ -36,5 +36,17 @@ postService.create = (author, title, body) => {
     return db.none(sql, { author, title, body });
 };
 
+postService.update = (post_id, author, title, body) => {
+    const sql = 'UPDATE posts SET author=${author}, title=${title}, body=${body} WHERE id=${post_id}';
+
+    return db.none(sql, { post_id, author, title, body });
+};
+
+postService.delete = (post_id) => {
+    const sql = 'DELETE FROM comment WHERE post_id=$[post_id]; DELETE FROM posts WHERE id=$[post_id];';
+
+    return db.none(sql, { post_id });
+};
+
 
 module.exports = postService;
