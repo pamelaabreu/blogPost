@@ -60,9 +60,34 @@ postRoutes.post('/', (req, res) => {
     })
 });
 
-
-
 // ❌ PUT /post/:post_id
+postRoutes.put('/:post_id', (req, res) => {
+    const { post_id }  = req.params;
+    const { author, title, body } = req.body;
+
+    postService.update(post_id, author, title, body)
+    .then(() => {
+        res.json({success: `Updated ${title} by ${author}!`});
+    })
+    .catch(err => {
+        console.log('Error', err.toString());
+        res.status(404).json({error: `Unable to update ${title}! Try again!`});
+    })
+
+});
+
 // ❌ DEL /post/:post_id
+postRoutes.delete('/:post_id', (req, res) => {
+    const { post_id }  = req.params;
+
+    postService.delete(post_id)
+    .then(() => {
+        res.json({success: `Deleted post with ID:${post_id}!`});
+    })
+    .catch(err => {
+        console.log('Error', err.toString());
+        res.status(404).json({error: `Unable to delete post with ID:${post_id}! Try again!`});
+    })
+});
 
 module.exports = postRoutes;
