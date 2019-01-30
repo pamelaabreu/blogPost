@@ -8,6 +8,7 @@ const port = 3000;
 // const { checkToken } = require('./middleware');
 const userRoutes = require('./routes/user');
 const postRoutes = require('./routes/post');
+const commentRoutes = require('./routes/comment');
 
 // MIDDLEWARE
 app.use(bodyParser.urlencoded({extended: false}));
@@ -20,6 +21,7 @@ app.get('/ping', (req, res) => {
 
 app.use('/user', userRoutes);
 app.use('/post', postRoutes);
+app.use('/comment', commentRoutes);
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
 
