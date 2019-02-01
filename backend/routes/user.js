@@ -2,8 +2,7 @@ const express = require('express');
 const userRoutes = express.Router();
 const userService = require('../services/user');
 
-//PUBLIC USER ROUTES
-
+// PUBLIC USER ROUTES
 // ✅ POST /user
 userRoutes.post('/', (req, res) => {
     const { username, email, password } = req.body;
@@ -120,7 +119,7 @@ userRoutes.post('/login', (req, res) => {
     //     })
 });
 
-//PRIVATE USER ROUTES
+// PRIVATE USER ROUTES
 // ❌ PUT /user/:user_id
 userRoutes.put('/:user_id', (req, res) => {
     const { user_id }  = req.params;
@@ -135,8 +134,7 @@ userRoutes.put('/:user_id', (req, res) => {
         res.status(404).json({error: `Unable to update ${username}! Try again!`});
     })
 
-
-})
+});
 
 // ❌ DEL /user/:user_id
 userRoutes.delete('/:user_id', (req, res) => {
@@ -150,7 +148,7 @@ userRoutes.delete('/:user_id', (req, res) => {
         console.log('Error', err.toString());
         res.status(404).json({error: `Unable to delete user with ID:${user_id}! Try again!`});
     })
-})
+});
 
 module.exports = userRoutes;
 

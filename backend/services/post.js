@@ -48,5 +48,4 @@ postService.delete = (post_id) => {
     return db.none(sql, { post_id });
 };
 
-
 module.exports = postService;
