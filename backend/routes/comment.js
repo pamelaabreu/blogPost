@@ -2,7 +2,6 @@ const express = require('express');
 const commentRoutes = express.Router();
 const commentService = require('../services/comment');
 
-
 // ✅ GET /comment/:comment_id
 commentRoutes.get('/:comment_id', (req, res) => {
     const { comment_id } = req.params;
@@ -48,5 +47,18 @@ commentRoutes.put('/:comment_id', (req, res) => {
 });
 
 // ❌ DEL /comment/:comment_id
+
+commentRoutes.delete('/:comment_id', (req, res) => {
+    const {comment_id} = req.params;
+
+    commentService.delete(comment_id)
+    .then(() => {
+        res.json({success: `Deleted comment with ID:${comment_id}!`});
+    })
+    .catch(err => {
+        console.log('Error', err.toString());
+        res.status(404).json({error: `Unable to delete user with ID:${comment_id}! Try again!`});
+    })
+});
 
 module.exports = commentRoutes;
